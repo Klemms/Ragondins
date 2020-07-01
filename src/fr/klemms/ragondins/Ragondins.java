@@ -31,22 +31,25 @@ public class Ragondins extends JavaPlugin {
 
 	public void onEnable() {
 		pl = this;
+		
 		getServer().getPluginManager().registerEvents(new ItemPickupEvent(), this);
 		getServer().getPluginManager().registerEvents(new JoinEvent(), this);
 		getServer().getPluginManager().registerEvents(new SlotRefill(), this);
 		getServer().getPluginManager().registerEvents(new BedEvents(), this);
 		getServer().getPluginManager().registerEvents(new WorldEdit(), this);
 		getServer().getPluginManager().registerEvents(new ChatEvents(), this);
+		
 		playersInBed = new HashSet<>();
 		worldEdit_first = new HashMap<>();
 		worldEdit_second = new HashMap<>();
+		
 		World world = Bukkit.getWorld("world");
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
 			if (world.getTime() > 12000L && playersInBed.size() > 0) {
 				if (getPlayersInSurvival() == playersInBed.size()) {
-					world.setTime(world.getTime() + 50L);
+					world.setTime(world.getTime() + (60 + 20 * getPlayersInSurvival()));
 				} else {
-					world.setTime(world.getTime() + 20L);
+					world.setTime(world.getTime() + (20 + 10 * getPlayersInSurvival()));
 				}
 			} else {
 				playersInBed.clear();
