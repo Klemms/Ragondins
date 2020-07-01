@@ -20,6 +20,7 @@ import fr.klemms.ragondins.events.ItemPickupEvent;
 import fr.klemms.ragondins.events.JoinEvent;
 import fr.klemms.ragondins.events.SlotRefill;
 import fr.klemms.ragondins.events.WorldEdit;
+import fr.klemms.ragondins.events.WorldEvents;
 
 public class Ragondins extends JavaPlugin {
 	
@@ -38,6 +39,7 @@ public class Ragondins extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new BedEvents(), this);
 		getServer().getPluginManager().registerEvents(new WorldEdit(), this);
 		getServer().getPluginManager().registerEvents(new ChatEvents(), this);
+		getServer().getPluginManager().registerEvents(new WorldEvents(), this);
 		
 		playersInBed = new HashSet<>();
 		worldEdit_first = new HashMap<>();
