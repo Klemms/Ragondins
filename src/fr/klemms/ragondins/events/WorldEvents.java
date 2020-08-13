@@ -2,35 +2,57 @@ package fr.klemms.ragondins.events;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
+import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import fr.klemms.ragondins.ChatContent;
 import fr.klemms.ragondins.Ragondins;
 import fr.klemms.ragondins.Utils;
+import net.md_5.bungee.api.ChatColor;
 
 public class WorldEvents implements Listener {
 
 	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		event.setJoinMessage(ChatContent.DARK_GRAY + Utils.getCurrentTime() + " " + ChatContent.ITALIC + Utils.getColoredPlayerName(event.getPlayer(), ChatContent.YELLOW, ChatContent.ITALIC) + ChatContent.YELLOW + " s'est connecté");
+	}
+
+	@EventHandler
+	public void onPlayerLeave(PlayerQuitEvent event) {
+		event.setQuitMessage(ChatContent.DARK_GRAY + Utils.getCurrentTime() + " " + Utils.getColoredPlayerName(event.getPlayer(), ChatContent.YELLOW, ChatContent.ITALIC) + ChatContent.YELLOW + " s'est déconnecté");
+	}
+
+	@EventHandler
 	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
-		boolean keepInventory = Utils.isLocationInTheEnd(event.getPlayer().getWorld(), event.getPlayer().getLocation()) || event.getPlayer().getLocation().getWorld().getGameRuleValue(GameRule.KEEP_INVENTORY);
-		BossBar bar = Bukkit.createBossBar(
-				keepInventory ? ChatContent.GREEN + "Stuff gardé à la mort dans ce monde" : ChatContent.RED + "Stuff droppé à la mort dans ce monde",
-				keepInventory ? BarColor.GREEN : BarColor.RED,
-				BarStyle.SOLID);
-		
-		bar.setProgress(1D);
-		bar.addPlayer(event.getPlayer());
-		bar.setVisible(true);
-		
-		Bukkit.getScheduler().scheduleSyncDelayedTask(Ragondins.pl, () -> {
-			bar.setVisible(false);
-		}, 5 * 20);
-		
-		event.getPlayer().getLocation().getWorld().setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, true);
+		if (Utils.isLocationInTheEnd(event.getPlayer().getWorld(), event.getPlayer().getLocation())) {
+			BossBar bar = Bukkit.createBossBar(
+					ChatColor.BLUE + "En cas de chute dans le vide vous réapparaitrez dans le monde normal",
+					BarColor.BLUE, BarStyle.SOLID);
+			
+			bar.setProgress(1D);
+			bar.addPlayer(event.getPlayer());
+			bar.setVisible(true);
+			
+			Bukkit.getScheduler().scheduleSyncDelayedTask(Ragondins.pl, () -> bar.setVisible(false), 100L);
+			
+			event.getPlayer().getLocation().getWorld().setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, true);
+		}
+	}
+
+	@EventHandler
+	public void onPlayerBreakBlock(BlockBreakEvent event) {
+		if (event.getBlock().getType() == Material.ANCIENT_DEBRIS) {
+			if (Utils.isLocationInTheNether(event.getPlayer().getWorld(), event.getPlayer().getLocation())) {
+				Bukkit.broadcastMessage(Utils.getPlayerTeamColor(event.getPlayer(), ChatContent.GRAY) + ChatContent.ITALIC + event.getPlayer().getDisplayName() + ChatContent.GRAY + " a trouvé un Ancient Debris");
+			}
+		}
 	}
 }
