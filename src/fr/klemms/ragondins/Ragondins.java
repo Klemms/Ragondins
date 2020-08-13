@@ -46,6 +46,7 @@ public class Ragondins extends JavaPlugin {
 		playersInBed = new HashSet<>();
 		worldEdit_first = new HashMap<>();
 		worldEdit_second = new HashMap<>();
+		TeleportStone.setupHomes();
 		
 		World world = Bukkit.getWorld("world");
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
