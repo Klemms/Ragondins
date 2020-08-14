@@ -8,9 +8,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,9 +32,12 @@ public class Ragondins extends JavaPlugin {
 	public static HashSet<Player> playersInBed;
 	public static HashMap<Player, Location> worldEdit_first;
 	public static HashMap<Player, Location> worldEdit_second;
+	
+	public static NamespacedKey teleportStoneKey;
 
 	public void onEnable() {
 		pl = this;
+		teleportStoneKey = new NamespacedKey(Ragondins.pl, "teleport_stone");
 		
 		getServer().getPluginManager().registerEvents(new ItemPickupEvent(), this);
 		getServer().getPluginManager().registerEvents(new JoinEvent(), this);
@@ -47,6 +52,10 @@ public class Ragondins extends JavaPlugin {
 		worldEdit_first = new HashMap<>();
 		worldEdit_second = new HashMap<>();
 		TeleportStone.setupHomes();
+		
+		getCommand("sethome").setExecutor(new CommandSetHome());
+	
+		addCustomRecipes();
 		
 		World world = Bukkit.getWorld("world");
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
@@ -63,6 +72,17 @@ public class Ragondins extends JavaPlugin {
 	}
 
 	public void onDisable() {
+		Bukkit.removeRecipe(teleportStoneKey);
+	}
+	
+	public static void addCustomRecipes() {
+		ShapedRecipe teleportStoneRecipe = new ShapedRecipe(teleportStoneKey, TeleportStone.getTeleportStoneStack());
+		
+		teleportStoneRecipe.shape("FFF", "FEF", "FFF");
+		teleportStoneRecipe.setIngredient('F', Material.CHORUS_FRUIT);
+		teleportStoneRecipe.setIngredient('E', Material.ENDER_EYE);
+		
+		Bukkit.addRecipe(teleportStoneRecipe);
 	}
 
 	public static String getItemName(ItemStack itemStack) {

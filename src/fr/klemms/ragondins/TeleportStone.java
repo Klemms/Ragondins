@@ -3,22 +3,43 @@ package fr.klemms.ragondins;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class TeleportStone {
 	
-	private static HashMap<UUID, Location> playerHomes;
+	public static HashMap<UUID, Location> playerHomes;
+	public static Path filePath;
+	
+	public static ItemStack getTeleportStoneStack() {
+		ItemStack is = new ItemStack(Material.CHORUS_FRUIT, 1);
+		ItemMeta im = is.getItemMeta();
+		
+		im.setDisplayName(ChatContent.AQUA + "Pierre de Téléportation");
+		im.setLore(Arrays.asList(ChatContent.GRAY + ChatContent.ITALIC + "Vous téléporte à votre home"));
+		im.addEnchant(Enchantment.ARROW_DAMAGE, 1, false);
+		im.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+		
+		is.setItemMeta(im);
+		
+		return is;
+	}
 
 	public static void setupHomes() {
 		playerHomes = new HashMap<UUID, Location>();
 		
-		Path filePath = Ragondins.pl.getDataFolder().toPath().resolve("playerhomes.yml");
+		filePath = Ragondins.pl.getDataFolder().toPath().resolve("playerhomes.yml");
 
 		if (Files.exists(filePath)) {
 			loadHomes(filePath);

@@ -30,6 +30,12 @@ public class ChatEvents implements Listener {
 			}
 		}
 		
+		if (event.getMessage().toLowerCase().contains("wololo")) {
+			for (Player pl : Bukkit.getOnlinePlayers()) {
+				pl.playSound(pl.getLocation(), Sound.ENTITY_EVOKER_PREPARE_WOLOLO, 2F, 1F);
+			}
+		}
+		
 		event.setMessage(event.getMessage().replace("<3", ChatContent.RED + "♥" + ChatContent.RESET));
 		
 		event.setFormat(ChatContent.DARK_GRAY + date.format(new Date()) + ChatContent.GRAY + " [" + Utils.getPlayerTeamColor(event.getPlayer(), ChatContent.GRAY) + event.getPlayer().getDisplayName() + ChatContent.GRAY + "] " + ChatContent.WHITE + event.getMessage());
