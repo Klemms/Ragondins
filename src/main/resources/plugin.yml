@@ -1,0 +1,9 @@
+name: Ragondins
+main: com.clementababou.ragondins.Ragondins
+version: 1.0.1
+author: Klemms
+api-version: 1.18
+commands:
+    sethome:
+        description: Defini votre home
+        usage: /sethome
