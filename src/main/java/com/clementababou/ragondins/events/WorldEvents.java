@@ -1,18 +1,25 @@
 package com.clementababou.ragondins.events;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.Material;
+import org.bukkit.block.Beehive;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
+import com.clementababou.ragondins.ActionBar;
 import com.clementababou.ragondins.ChatContent;
 import com.clementababou.ragondins.Ragondins;
 import com.clementababou.ragondins.Utils;
@@ -31,6 +38,44 @@ public class WorldEvents implements Listener {
 	public void onPlayerLeave(PlayerQuitEvent event) {
 		event.setQuitMessage(null);
 		//event.setQuitMessage(ChatContent.DARK_GRAY + Utils.getCurrentTime() + " " + Utils.getColoredPlayerName(event.getPlayer(), ChatContent.YELLOW, ChatContent.ITALIC) + ChatContent.YELLOW + " s'est déconnecté");
+	}
+	
+	@EventHandler
+	public void onLeafDecay(LeavesDecayEvent event) {
+		if (event.getBlock().getType() == Material.DARK_OAK_LEAVES) {
+			// 20% chance to drop an extra sapling
+			if (ThreadLocalRandom.current().nextInt(10) <= 1) {
+				event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(Material.DARK_OAK_SAPLING, 1));
+			}
+		}
+		
+		if (event.getBlock().getType() == Material.JUNGLE_LEAVES) {
+			// 10% chance to drop an extra sapling
+			if (ThreadLocalRandom.current().nextInt(10) == 0) {
+				event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(Material.JUNGLE_SAPLING, 1));
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onPlayerInteract(PlayerInteractEvent event) {
+		if (event.getPlayer().isSneaking() && event.getClickedBlock().getState() instanceof Beehive) {
+			event.setCancelled(true);
+			
+			Beehive beehive = (Beehive) event.getClickedBlock().getState();
+			String str = "Il y a " + beehive.getEntityCount() + "/" + beehive.getMaxEntities() + " abeilles dans cette ruche. ";
+			
+			if (event.getClickedBlock().getBlockData() instanceof org.bukkit.block.data.type.Beehive) {
+				org.bukkit.block.data.type.Beehive beehiveData = (org.bukkit.block.data.type.Beehive) event.getClickedBlock().getBlockData();
+				
+				str += "Niveau de miel " + beehiveData.getHoneyLevel() + "/" + beehiveData.getMaximumHoneyLevel() + ". ";
+			}
+			
+			if (beehive.isSedated())
+				str += "Ruche sédatée.";
+			
+			ActionBar.sendActionBar(event.getPlayer(), str, 3 * 20);
+		}
 	}
 
 	@EventHandler

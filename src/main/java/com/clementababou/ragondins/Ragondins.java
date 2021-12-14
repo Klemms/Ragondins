@@ -72,6 +72,9 @@ public class Ragondins extends JavaPlugin {
 	}
 	
 	public static void addCustomRecipes() {
+		if (Bukkit.getRecipe(teleportStoneKey) != null)
+			return;
+		
 		ShapedRecipe teleportStoneRecipe = new ShapedRecipe(teleportStoneKey, TeleportStone.getTeleportStoneStack());
 		
 		teleportStoneRecipe.shape("FFF", "FEF", "FFF");
