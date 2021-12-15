@@ -2,14 +2,22 @@ package com.clementababou.ragondins;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Team;
 
 public class Utils {
@@ -106,6 +114,72 @@ public class Utils {
 				return true;
 			default:
 				return false;
+		}
+	}
+	
+	public static List<Block> getBlocksInRadius(World world, Location location, int radius) {
+		List<Block> blocks = new ArrayList<Block>();
+		
+		for (double x = location.getX() - radius; x <= location.getX() + radius; x++) {
+			for (double y = location.getY() - radius; y <= location.getY() + radius; y++) {
+				for (double z = location.getZ() - radius; z <= location.getZ() + radius; z++) {
+					blocks.add(world.getBlockAt(new Location(world, x, y, z)));
+				}
+			}
+		}
+		
+		return blocks;
+	}
+	
+	public static boolean isItemInInventory(Inventory inv, Material mat) {
+		for (ItemStack is : inv.getContents()) {
+			if (is != null && is.getType() == mat)
+				return true;
+		}
+		
+		return false;
+	}
+	
+	public static Color getRandomBukkitColor() {
+		int rand = ThreadLocalRandom.current().nextInt(16);
+		switch (rand) {
+			case 0:
+				return Color.AQUA;
+			case 1:
+				return Color.BLACK;
+			case 2:
+				return Color.BLUE;
+			case 3:
+				return Color.FUCHSIA;
+			case 4:
+				return Color.GRAY;
+			case 5:
+				return Color.GREEN;
+			case 6:
+				return Color.LIME;
+			case 7:
+				return Color.MAROON;
+			case 8:
+				return Color.NAVY;
+			case 9:
+				return Color.OLIVE;
+			case 10:
+				return Color.ORANGE;
+			case 11:
+				return Color.PURPLE;
+			case 12:
+				return Color.RED;
+			case 13:
+				return Color.SILVER;
+			case 14:
+				return Color.TEAL;
+			case 15:
+				return Color.WHITE;
+			case 17:
+				return Color.YELLOW;
+			default:
+				return Color.WHITE;
+					
 		}
 	}
 }

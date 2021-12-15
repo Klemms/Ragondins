@@ -16,6 +16,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.clementababou.ragondins.events.InventoryEvents;
 import com.clementababou.ragondins.events.ItemPickupEvent;
 import com.clementababou.ragondins.events.JoinEvent;
 import com.clementababou.ragondins.events.SlotRefill;
@@ -45,6 +46,7 @@ public class Ragondins extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new WorldEdit(), this);
 		getServer().getPluginManager().registerEvents(new WorldEvents(), this);
 		getServer().getPluginManager().registerEvents(new TeleportStoneEvents(), this);
+		getServer().getPluginManager().registerEvents(new InventoryEvents(), this);
 		
 		playersInBed = new HashSet<>();
 		worldEdit_first = new HashMap<>();
