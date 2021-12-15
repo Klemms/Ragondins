@@ -1,7 +1,6 @@
 package com.clementababou.ragondins;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
@@ -9,7 +8,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -28,7 +26,6 @@ public class Ragondins extends JavaPlugin {
 	
 	public static Ragondins pl;
 
-	public static HashSet<Player> playersInBed;
 	public static HashMap<Player, Location> worldEdit_first;
 	public static HashMap<Player, Location> worldEdit_second;
 	
@@ -48,25 +45,11 @@ public class Ragondins extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new TeleportStoneEvents(), this);
 		getServer().getPluginManager().registerEvents(new InventoryEvents(), this);
 		
-		playersInBed = new HashSet<>();
 		worldEdit_first = new HashMap<>();
 		worldEdit_second = new HashMap<>();
 		TeleportStone.setupHomes();
 		
 		getCommand("sethome").setExecutor(new CommandSetHome());
-		
-		World world = Bukkit.getWorld("world");
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
-			if (world.getTime() > 12000L && playersInBed.size() > 0) {
-				if (getPlayersInSurvival() == playersInBed.size()) {
-					world.setTime(world.getTime() + (60 + 20 * getPlayersInSurvival()));
-				} else {
-					world.setTime(world.getTime() + (20 + 10 * getPlayersInSurvival()));
-				}
-			} else {
-				playersInBed.clear();
-			}
-		}, 10L, 5L);
 	}
 
 	public void onDisable() {
