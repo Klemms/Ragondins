@@ -1,6 +1,8 @@
 ### Development (I added the jars to git.)
 #.gitignore
 
+dependency-reduced-pom.xml
+
 ### JDeveloper template
 # default application storage directory used by the IDE Performance Cache feature
 .data/
