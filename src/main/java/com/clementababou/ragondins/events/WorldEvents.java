@@ -11,6 +11,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -53,13 +54,13 @@ public class WorldEvents implements Listener {
 			// 10% chance to drop an extra sapling
 			if (ThreadLocalRandom.current().nextInt(10) == 0) {
 				event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), new ItemStack(Material.JUNGLE_SAPLING, 1));
-			}
+			}	
 		}
 	}
 	
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		if (event.getPlayer().isSneaking() && event.getClickedBlock().getState() instanceof Beehive) {
+		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getPlayer().isSneaking() && event.getClickedBlock() != null && event.getClickedBlock().getState() instanceof Beehive) {
 			event.setCancelled(true);
 			
 			Beehive beehive = (Beehive) event.getClickedBlock().getState();
