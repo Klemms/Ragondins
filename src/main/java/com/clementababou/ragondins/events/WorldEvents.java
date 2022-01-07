@@ -31,14 +31,14 @@ public class WorldEvents implements Listener {
 
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		event.setJoinMessage(null);
-		//event.setJoinMessage(ChatContent.DARK_GRAY + Utils.getCurrentTime() + " " + ChatContent.ITALIC + Utils.getColoredPlayerName(event.getPlayer(), ChatContent.YELLOW, ChatContent.ITALIC) + ChatContent.YELLOW + " s'est connecté");
+		//event.setJoinMessage(null);
+		event.setJoinMessage(ChatContent.DARK_GRAY + Utils.getCurrentTime() + " " + ChatContent.ITALIC + Utils.getColoredPlayerName(event.getPlayer(), ChatContent.YELLOW, ChatContent.ITALIC) + ChatContent.YELLOW + " s'est connecté");
 	}
 
 	@EventHandler
 	public void onPlayerLeave(PlayerQuitEvent event) {
-		event.setQuitMessage(null);
-		//event.setQuitMessage(ChatContent.DARK_GRAY + Utils.getCurrentTime() + " " + Utils.getColoredPlayerName(event.getPlayer(), ChatContent.YELLOW, ChatContent.ITALIC) + ChatContent.YELLOW + " s'est déconnecté");
+		//event.setQuitMessage(null);
+		event.setQuitMessage(ChatContent.DARK_GRAY + Utils.getCurrentTime() + " " + Utils.getColoredPlayerName(event.getPlayer(), ChatContent.YELLOW, ChatContent.ITALIC) + ChatContent.YELLOW + " s'est déconnecté");
 	}
 	
 	@EventHandler
